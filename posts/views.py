@@ -1,7 +1,7 @@
 from django.http import HttpResponse
 from django.shortcuts import render, redirect
 
-from posts.forms import PostForm
+from posts.forms import PostForm, PostForm2
 from posts.models import Post
 
 
@@ -27,13 +27,16 @@ def post_detail_view(request, post_id):
 
 def post_create_view(request):
     if request.method == 'GET':
-        form = PostForm
+        form = PostForm2()
         return render(request, 'post_create.html', context={'form': form})
     if request.method == 'POST':
-        image = request.FILES.get('image')
-        title = request.POST.get('title')
-        content = request.POST.get('content')
-        rate = request.POST.get('rate')
+        form = PostForm(request.POST, request.FILES)
+        if not form.is_valid():
+            return render(request, 'post_create.html', {'form': form})
+        image = form.cleaned_data.get('image')
+        title = form.cleaned_data.get('title')
+        content = form.cleaned_data.get('content')
+        rate = form.cleaned_data.get('rate')
         Post.objects.create(
             image=image,
             title=title,
