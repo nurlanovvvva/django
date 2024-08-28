@@ -19,11 +19,12 @@ from django.http import HttpResponse
 from django.conf.urls.static import static
 from django.urls import path
 from django.conf import settings
-from posts.views import text_response, html_response, post_list_view, post_detail_view
+from posts.views import text_response, html_response, post_list_view, post_detail_view, post_create_view
 
 
 def home_view(request):
     return HttpResponse("Добро пожаловать на главную страницу!")
+
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -31,5 +32,6 @@ urlpatterns = [
     path('text/', text_response, name='text_response'),
     path('html/', html_response, name='html_response'),
     path('posts/', post_list_view),
-    path('posts/<int:post_id>/', post_detail_view)
+    path('posts/<int:post_id>/', post_detail_view),
+    path("posts/create/", post_create_view)
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
