@@ -19,19 +19,28 @@ from django.http import HttpResponse
 from django.conf.urls.static import static
 from django.urls import path
 from django.conf import settings
-from posts.views import text_response, html_response, post_list_view, post_detail_view, post_create_view
-
+from posts.views import (
+    text_response,
+    html_response,
+    post_list_view,
+    post_detail_view,
+    post_create_view
+)
+from user.views import register_view, login_view, logout_view
 
 def home_view(request):
     return HttpResponse("Добро пожаловать на главную страницу!")
 
 
 urlpatterns = [
-    path('admin/', admin.site.urls),
+    path('admin/', admin.site.urls, name='admin'),
     path('', home_view, name='home'),
     path('text/', text_response, name='text_response'),
     path('html/', html_response, name='html_response'),
-    path('posts/', post_list_view),
-    path('posts/<int:post_id>/', post_detail_view),
-    path("posts/create/", post_create_view)
+    path('posts/', post_list_view, name='post_list'),
+    path('posts/<int:post_id>/', post_detail_view, name='post_detail'),
+    path("posts/create/", post_create_view, name='post_create'),
+    path('register/', register_view, name='register'),
+    path('login/', login_view, name='login'),
+    path('logout/', logout_view, name='logout'),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
