@@ -22,6 +22,3 @@ class Post(models.Model):
     updated_at = models.DateTimeField(auto_now=True, null=True, blank=True)
     category = models.ForeignKey(Category, on_delete=models.CASCADE, null=True, blank=True)
     tag = models.ManyToManyField(Tag, null=True, blank=True)
-
-    def __str__(self):
-        return self.title

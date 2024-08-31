@@ -3,6 +3,10 @@
 
 <body>
 {%block content%}
+<form style="padding-left: 10px;" action="" method="get">
+  {{search_form.as_p}}
+  <button type="submit" class="btn btn-primary">Search</button>
+</form>
 {% for post in posts%}
 <div class="card" style="width: 18rem;">
   {%if post.image%}
@@ -17,6 +21,9 @@
     <a href="/posts/{{post.id}}" class="btn btn-primary">Посмотреть пост</a>
   </div>
 </div>
+{% endfor %}
+{%for page in max_page%}
+<a style="padding-bottom: 15px; padding-top: 28px; border-color: gray" href="/posts/?page={{page}}">{{page}}</a>
 {% endfor %}
 {%endblock%}
 
