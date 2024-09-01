@@ -2,6 +2,7 @@ from django import forms
 
 
 class RegisterForm(forms.Form):
+    image = forms.ImageField(required=False)
     username = forms.CharField(max_length=50)
     email = forms.EmailField()
     first_name = forms.CharField(max_length=50)

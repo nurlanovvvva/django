@@ -24,9 +24,15 @@ from posts.views import (
     html_response,
     post_list_view,
     post_detail_view,
-    post_create_view
+    post_create_view,
+    post_update_view,
+    TestView,
+    PostListView,
+    PostDetailView,
+    PostCreateView,
 )
-from user.views import register_view, login_view, logout_view
+from user.views import register_view, login_view, logout_view, profile_view
+
 
 def home_view(request):
     return HttpResponse("Добро пожаловать на главную страницу!")
@@ -43,4 +49,9 @@ urlpatterns = [
     path('register/', register_view, name='register'),
     path('login/', login_view, name='login'),
     path('logout/', logout_view, name='logout'),
+    path('profile/', profile_view, name='profile'),
+    path('posts/<int:post_id>/update', post_update_view, name='post_update' ),
+    path('posts2/', post_list_view, name='post_list2'),
+    path('posts2/<int:pk>/', PostDetailView.as_view(), name='post_detail2'),
+    path('posts2/create/', PostCreateView.as_view(), name='post_create2'),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

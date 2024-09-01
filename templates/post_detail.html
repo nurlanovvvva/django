@@ -12,7 +12,10 @@
   <div class="card-body">
     <h5 class="card-title">{{post.title}}</h5>
     <p class="card-text">{{post.content}}</p>
-      <p class="card-text">{{post.rate}}</p>
+    <p class="card-text">{{post.rate}}</p>
+    {%if post.author == request.user%}
+    <a href="/posts/{{post.id}}/update" class="btn btn-primary">Update Post</a>
+    {%endif%}
   </div>
 </div>
 {%endblock%}

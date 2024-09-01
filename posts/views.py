@@ -1,10 +1,18 @@
+import random
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse
 from django.db.models import Q
 from django.shortcuts import render, redirect
-from posts.forms import PostForm, PostForm2, SearchForm
+from django.views.generic import ListView, DetailView
+from posts.forms import PostForm, PostForm2, SearchForm, PostUpdateForm
 from posts.models import Post
+from django.views import View
+from django.views.generic import ListView, DetailView, CreateView
 
+
+class TestView(View):
+    def get(self, request):
+        return HttpResponse(f'{random.randint(0,100)}Hello word')
 
 def text_response(request):
     return HttpResponse("Текстовое сообщение от приложения.")
@@ -45,11 +53,25 @@ def post_list_view(request):
         return render(request, 'post_list.html', context=context)
 
 
+class PostListView(ListView):
+    model = Post
+    form = SearchForm
+    template_name = 'post_list.html'
+    context_object_name = 'posts'
+
+
 @login_required(login_url='login')
 def post_detail_view(request, post_id):
     if request.method == 'GET':
         post = Post.objects.get(id=post_id)
         return render(request, 'post_detail.html', {'post': post})
+
+
+class PostDetailView(DetailView):
+    model = Post
+    template_name = 'post_detail.html'
+    context_object_name = 'post'
+    lookup_url_kwarg = 'post_id'
 
 
 @login_required(login_url='login')
@@ -72,4 +94,25 @@ def post_create_view(request):
             rate=rate
         )
         return redirect("/posts/")
+
+
+class PostCreateView(CreateView):
+    model = Post
+    form_class = PostForm2
+    template_name = 'post_create.html'
+    success_url = "/posts2/"
+
+
+@login_required(login_url='login')
+def post_update_view(request, post_id):
+    post = Post.objects.get(id=post_id)
+    if request.method == 'GET':
+        form = PostUpdateForm(instance=post)
+        return render(request, "posts/post_update.html", context={'form' : form, 'post': post})
+    if request.method == 'POST':
+        form = PostUpdateForm(request.POST, request.FILES, instance=post)
+        if not form.is_valid():
+            return render(request, 'post_create.html', {'form': form, 'post': post})
+        form.save()
+        return redirect("/profile/")
 

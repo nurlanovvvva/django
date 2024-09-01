@@ -78,6 +78,11 @@ class SearchForm(forms.Form):
     )
 
 
+class PostUpdateForm(forms.ModelForm):
+    model = Post
+    fields = ('title', 'rate', 'content', 'image')
+
+
 
 
 
